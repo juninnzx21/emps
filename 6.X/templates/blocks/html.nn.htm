@@ -1,0 +1,17 @@
+<block-template>
+    <title>Text (HTML)</title>
+    <params>
+        <param name="html" title="HTML" type="h">
+        <default>
+            {{if $lang == "en"}}
+                <p>This is a sample HTML text!</p>
+            {{else}}
+                <p>Это пробный HTML текст!</p>
+            {{/if}}
+        </default>
+        </param>
+    </params>
+    <block>
+        <html param="html" />
+    </block>
+</block-template>

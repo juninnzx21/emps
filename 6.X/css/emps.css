@@ -1,0 +1,32 @@
+.emps-montage-container {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    flex-direction: row-reverse;
+}
+
+
+a.emps-montage-item {
+    flex:1;
+    display:block;
+    min-width:25%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border:0.5px solid white;
+}
+
+a.emps-montage-item img {
+    width:100%;
+
+}
+
+@media (max-width: 767px) {
+    a.emps-montage-item {
+        min-width:50%;
+    }
+}
+
+.vted-controls {
+    display: flex;
+    flex-flow: wrap;
+}

@@ -1,0 +1,16 @@
+<div class="field is-horizontal">
+    <div class="field-label is-normal">
+        {{if $lang == "en"}}
+            <label class="label">Name</label>
+        {{else}}
+            <label class="label">Наименование</label>
+        {{/if}}
+    </div>
+    <div class="field-body">
+        <div class="field">
+            <div class="control">
+                <input class="input" type="text" placeholder="" v-model="new_row.name">
+            </div>
+        </div>
+    </div>
+</div>

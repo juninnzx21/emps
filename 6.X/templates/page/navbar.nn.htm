@@ -1,0 +1,166 @@
+{{if $lang eq "en"}}
+    {{assign var="str_toggle" value="Toggle navigation"}}
+    {{assign var="str_login" value="Log In"}}
+    {{assign var="str_logout" value="Log Out"}}
+{{else}}
+    {{assign var="str_toggle" value="Переключить навигацию"}}
+    {{assign var="str_login" value="Войти"}}
+    {{assign var="str_logout" value="Выйти"}}
+{{/if}}
+
+{{if $page.css_fw == "bulma"}}
+
+    <nav class="navbar {{if $navbar_class}}{{$navbar_class}}{{else}}is-primary{{/if}}">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item {{if $brand_class}}{{$brand_class}}{{else}}brand-item{{/if}}" href="/" title="{{"page/mainhead"|emps:get_setting}}">
+                    {{$navbar_image = ("page/brand_image"|emps:get_setting)}}
+                    {{if $navbar_image}}
+                        <img class="brand-logo" src="{{$navbar_image}}" />
+                    {{else}}
+                        {{$navbar_brand = ("page/brand"|emps:get_setting)}}
+                        {{if $navbar_brand}}
+                            {{$navbar_brand}}
+                        {{else}}
+                            EMPS
+                        {{/if}}
+                    {{/if}}
+                </a>
+
+                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarAdmin">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+            <div class="navbar-menu" id="navbarAdmin">
+                <div class="navbar-start">
+                    {{foreach from=$menus.admin item="item"}}
+                        {{if $item.sub}}
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link" href="{{$item.link}}">{{$item.dname}}</a>
+                                <div class="navbar-dropdown">
+                                    {{foreach from=$item.sub item="subitem"}}
+                                        <a class="navbar-item" href="{{$subitem.link}}">{{$subitem.dname}}</a>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        {{else}}
+                            <a class="navbar-item" href="{{$item.link}}">{{$item.dname}}</a>
+                        {{/if}}
+                    {{/foreach}}
+                </div>
+                {{include file="db:site/barlogin"}}
+            </div>
+        </div>
+    </nav>
+
+{{elseif $page.css_fw == "bootstrap4" || $smarty.const.EMPS_BOOTSTRAP == 4}}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerMainNavbar"
+                aria-expanded="false" aria-label="{{$str_toggle}}">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+            {{$navbar_title = ("page/brand"|emps:get_setting)}}
+            {{if !$navbar_title}}
+                {{$navbar_title = "EMPS"}}
+            {{/if}}
+        <a class="navbar-brand" href="/">{{$navbar_title}}</a>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerMainNavbar">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+                {{assign var="menu" value=$menus.admin}}
+                {{section name=i loop=$menu}}
+                    <li class="nav-item {{if $menu[i].sel}}active{{/if}} {{if $menu[i].sub}}dropdown{{/if}}">
+                        <a class="nav-link" href="{{$menu[i].link}}" class="{{if $menu[i].sub}}dropdown-toggle{{/if}}" {{if $menu[i].sub}}data-toggle="dropdown"{{/if}} id="{{$menu[i].id}}">{{$menu[i].dname}}</a>
+
+                        {{if $menu[i].sub}}
+                            <div class="dropdown-menu">
+                                {{assign var="smenu" value=$menu[i].sub}}
+                                {{section name=s loop=$smenu}}
+                                    <a class="dropdown-item" href="{{$smenu[s].link}}">{{$smenu[s].dname}}</a>
+                                {{/section}}
+                            </div>
+                        {{/if}}
+                    </li>
+                {{/section}}
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                {{if !$login.status}}
+                <a data-toggle="modal" href="#mainLogin" class="btn btn-outline-success my-2 my-sm-0"><i class="fa fa-sign-in"></i>&nbsp; {{$str_login}}</a>
+                {{else}}
+                <div class="dropdown show">
+                    <button class="btn btn-outline-success my-2 my-sm-0 dropdown-toggle" role="button" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{$login.user.fullname}} </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        {{if $AdminMode}}
+                            <a class="dropdown-item" href="/admin/">Admin</a>
+                        {{/if}}
+                        <a class="dropdown-item" href="./?logout=1">{{$str_logout}}</a>
+                    </div>
+                </div>
+
+                {{/if}}
+            </form>
+        </div>
+        </div>
+    </nav>
+
+{{else}}
+
+    <nav class="navbar navbar-fixed-top navbar-default navbar-static-top" role="navigation">
+<div class="container">
+	<div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mm-navbar-collapse">
+          <span class="sr-only">{{$str_toggle}}</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>    
+    </div>
+
+    <div class="collapse navbar-collapse" id="mm-navbar-collapse">
+        <ul class="nav navbar-nav">
+        	<li>
+            <a href="/"><i class="glyphicon glyphicon-home"></i></a>
+            </li>
+    {{assign var="menu" value=$menus.admin}}    
+    {{section name=i loop=$menu}}
+          <li class="{{if $menu[i].sel}}active{{/if}} {{if $menu[i].sub}}dropdown{{/if}}">
+          <a href="{{$menu[i].link}}" class="{{if $menu[i].sub}}dropdown-toggle{{/if}}" {{if $menu[i].sub}}data-toggle="dropdown"{{/if}} id="{{$menu[i].id}}">{{$menu[i].dname}}</a>
+    
+    {{if $menu[i].sub}}      
+            <ul class="dropdown-menu">
+    {{assign var="smenu" value=$menu[i].sub}}        
+    {{section name=s loop=$smenu}}
+                <li><a href="{{$smenu[s].link}}">{{$smenu[s].dname}}</a></li>
+    {{/section}}
+            </ul>
+    {{/if}}        
+          </li>
+    {{/section}}
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a data-toggle="modal" href="#mainSearch"><div class="mmsearch" o="glyphicon glyphicon-search"></div></a></li>
+    {{if !$login.status}}            
+            <li class="pull-right"><a data-toggle="modal" href="#mainLogin"><i class="glyphicon glyphicon-log-in"></i>&nbsp; {{$str_login}}</a></li>
+    {{else}}
+          <li class="dropdown pull-right">
+            <a href="/admin/" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{$login.user.fullname}} <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="./?logout=1">{{$str_logout}}</a></li>
+            </ul>
+          </li>        
+    {{/if}}        
+
+        </ul>
+
+	</div>
+</div>
+  
+</nav>
+
+{{/if}}

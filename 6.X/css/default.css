@@ -1,0 +1,138 @@
+/* CSS Document */
+
+.img, .rimg, .limg {
+	border:2px solid #CCDDFF;
+}
+
+.rimg {
+	float:right;
+	margin:0 0 10px 10px;
+}
+
+.limg {
+	float:left;
+	margin:0 10px 10px 0;
+}
+
+h1, h2, h3, h4, h5 {
+}
+
+h1 {
+	font-size:36px;
+}
+
+.pic-full {
+	width:100%;
+	margin-bottom:15px;
+}
+
+.pic-3-right {
+	float:right;
+	width:25%;
+	margin:0 0 15px 15px;
+}
+
+.pic-3-left {
+	width:25%;
+	float:left;	
+	margin:0 15px 15px 0;
+}
+
+.pic-4-right {
+	float:right;
+	width:35%;
+	margin:0 0 15px 15px;
+}
+
+.pic-4-left {
+	width:35%;
+	float:left;	
+	margin:0 15px 15px 0;
+}
+
+.pic-6-right {
+	width:45%;
+	float:right;
+	margin:0 0 15px 15px;
+}
+
+.pic-6-left {
+	width:45%;
+	float:left;
+	margin:0 15px 15px 0;
+}
+
+.pic-6-center {
+	width:55%;
+	display:block;
+	margin:0 auto 15px auto;
+	
+}
+
+.pic-descr {
+	color:#6c6c6c;
+	margin-top:-7px;
+	font-size:13px;
+}
+
+.bigger {
+	font-size:28px;
+}
+
+.strike {
+	text-decoration:line-through;
+	opacity:0.25;
+}
+
+@media (max-width: 767px) {
+
+	.cols-3 {
+		-webkit-column-count: 2; /* Chrome, Safari, Opera */
+		-moz-column-count: 2; /* Firefox */
+		column-count: 2;
+
+		-webkit-column-gap: 30px; /* Chrome, Safari, Opera */
+		-moz-column-gap: 30px; /* Firefox */
+		column-gap: 30px;
+	}
+
+	.pic-3-right, .pic-3-left {
+		width:35%;
+	}
+
+	.pic-6-right, .pic-6-left, .pic-6-center, .pic-4-right, .pic-4-left {
+		float:none;
+		width:100%;
+		margin:0 0 10px 0;
+	}
+}
+
+@media (max-width: 400px) {
+
+	.cols-3 {
+		-webkit-column-count: 1; /* Chrome, Safari, Opera */
+		-moz-column-count: 1; /* Firefox */
+		column-count: 1;
+
+		-webkit-column-gap: 30px; /* Chrome, Safari, Opera */
+		-moz-column-gap: 30px; /* Firefox */
+		column-gap: 30px;
+	}
+
+	.cols-2 {
+		-webkit-column-count: 1; /* Chrome, Safari, Opera */
+		-moz-column-count: 1; /* Firefox */
+		column-count: 1;
+
+		-webkit-column-gap: 30px; /* Chrome, Safari, Opera */
+		-moz-column-gap: 30px; /* Firefox */
+		column-gap: 30px;
+	}
+
+}
+
+.is-scrollable-pad {
+	overflow-Y: scroll;
+	height: calc(100vh - 20rem);
+	scrollbar-width: thin;
+}

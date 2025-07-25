@@ -1,0 +1,48 @@
+.file-uploader {
+    position: relative;
+}
+.file-uploader input[type="file"]
+{
+    position: absolute;
+    top: -100vh;
+    height: 0;
+}
+
+.up-upload-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.up-upload-image a {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+    text-align: center;
+    position: absolute;
+    object-position: center;
+    top: 0;
+    left: 0;
+}
+
+.up-upload-image a img {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    object-fit: cover; /* Ensures the image covers the entire container without distortion */
+    object-position: center; /* Centers the image within the container */
+}
+
+.up-upload-button {
+    position: absolute;
+    bottom: 0;
+    padding: 0.5rem;
+}

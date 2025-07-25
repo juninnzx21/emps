@@ -1,0 +1,12 @@
+{{if !$comp_block_params_included}}
+    {{var comp_block_params_included=true}}
+    <script type="text/x-template" id="block-params-component-template">
+        <div>
+        </div>
+    </script>
+    {{script src="/mjs/comp-block-params/params.js" defer=1}}
+    <script>
+        var strings = {do_delete: 'Точно удалить?'};
+    </script>
+    {{include file="db:_comp/image"}}
+{{/if}}

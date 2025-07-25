@@ -1,0 +1,81 @@
+{{if $lang == "en"}}
+    {{$str_collapse = "Collapse / Expand Section"}}
+    {{$str_actions = "Section Actions"}}
+    {{$str_edit = "Edit"}}
+    {{$str_delete = "Delete"}}
+{{else}}
+    {{$str_collapse = "Свернуть / развернуть подраздел"}}
+    {{$str_actions = "Действия с разделом"}}
+    {{$str_edit = "Редактировать"}}
+    {{$str_delete = "Удалить"}}
+{{/if}}
+<script type="text/x-template" id="treeitem-template">
+    <li >
+        <a
+                href="javascript:;"
+                :class="[{'is-active': is_active, 'is-tree-item': true}]"
+                @click.stop="set_active">
+            <span class="menu-buttons">
+                <button
+                        @click.stop="toggle"
+                        v-if="is_folder"
+                        type="button" class="button is-small is-white" title="{{$str_collapse}}">
+                    <i class="fa fa-chevron-right" v-if="!item.is_open"></i>
+                    <i class="fa fa-chevron-down" v-if="item.is_open"></i>
+                </button>
+                </span>
+            <span class="tree-item-name">
+                {{ item.name }}
+            </span>
+            <span class="menu-buttons">
+
+                <div class="dropdown is-right is-hoverable">
+  <div class="dropdown-trigger">
+                <button type="button"
+                        :class="{'button is-small': true, 'is-white': item.pub == 0, 'is-success': item.pub == 10}" title="{{$str_actions}}">
+                    <i class="fa fa-ellipsis-h"></i>
+                </button>
+  </div>
+  <div class="dropdown-menu" id="dropdown-menu" role="menu">
+    <div class="dropdown-content">
+      <a href="javascript:;"
+         @click.stop="edit_folder"
+         class="dropdown-item">
+        <i class="fa fa-pencil"></i>&nbsp; {{$str_edit}}
+      </a>
+              <hr class="dropdown-divider">
+      <a
+              href="javascript:;"
+              @click.stop="delete_folder"
+              class="dropdown-item">
+        <i class="fa fa-remove"></i>&nbsp; {{$str_delete}}
+      </a>
+    </div>
+  </div>
+</div>
+
+            </span>
+
+        </a>
+
+        <ul v-show="item.is_open" v-if="is_folder">
+            <treeitem
+                    class="item"
+                    v-for="(child, index) in item.subs"
+                    :key="index"
+                    :item="child"
+                    @make_folder="$emit('make_folder', $event)"
+                    @add_item="$emit('add_item', $event)"
+                    @set_active="$emit('set_active', $event)"
+                    @delete_folder="$emit('delete_folder', $event)"
+                    @edit_folder="$emit('edit_folder', $event)"
+            ></treeitem>
+{{*            <li>
+                <a href="javascript:;" @click="$emit('add_item', item)">
+                    <i class="fa fa-plus-square-o"></i> Добавить подраздел
+                </a>
+            </li>*}}
+        </ul>
+    </li>
+</script>
+<script src="/mjs/comp-treeitem/treeitem.js" defer></script>

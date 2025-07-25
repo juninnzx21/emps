@@ -1,0 +1,23 @@
+<div class="select-frame l-1" ref="l1">
+
+</div>
+<div class="select-frame-left" ref="plst">
+    <div class="buttons">
+        <template v-for="(parent,pi) in parents">
+            <a @click.stop.prevent="click_parent(parent)" class="button is-small is-info">{{ parent.tagName }}</a>
+        </template>
+    </div>
+
+</div>
+<div class="select-frame l-2" ref="l2">
+    <div class="select-frame-left">
+    </div>
+</div>
+<div class="select-frame l-3" ref="l3">
+    <div class="select-frame-left">
+    </div>
+</div>
+<div class="select-frame l-4" ref="l4">
+    <div class="select-frame-left">
+    </div>
+</div>

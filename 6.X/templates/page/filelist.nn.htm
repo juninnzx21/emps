@@ -1,0 +1,5 @@
+<ul>
+    {{foreach from=$filelist item="file"}}
+        <li><a href="/retrieve/{{$file.md5}}/{{$file.file_name}}">{{if $file.comment}}{{$file.comment}}{{else}}{{if $file.descr}}{{$file.descr}}{{else}}{{$file.file_name}}{{/if}}{{/if}}</a>, {{$file.fsize}}</li>
+    {{/foreach}}
+</ul>

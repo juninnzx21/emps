@@ -1,0 +1,16 @@
+<block-template>
+    <title>Image with Fancybox</title>
+    <params>
+        <param name="class" title="Class" type="c" default="is-block" />
+        <param name="imgclass" title="IMG Class" type="c" default="mask" />
+        <param name="gallery" title="Gallery Code" type="c" default="" />
+        <param name="name" title="Title" type="c" default="" />
+        <param name="image" title="Image" type="photo" template="" default="" />
+        <param name="tbparams" title="Thumbnail Parameters" type="c" default="opts=inner,q70&amp;size=600x600" />
+    </params>
+    <block>
+        <a add-class="class" title="[name]" data-fancybox="[gallery]" data-caption="[name]" href="/pic/[image.md5]/[image.filename]" target="_blank">
+            <img class="[imgclass]" alt="[name]" src="/freepic/[image.md5]/[image.filename]?[tbparams]" />
+        </a>
+    </block>
+</block-template>

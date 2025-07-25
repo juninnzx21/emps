@@ -1,0 +1,7 @@
+{{if !$comp_image_included}}
+{{var comp_image_included=true}}
+<script type="text/x-template" id="image-component-template">
+{{include file="db:_comp/image,image_vue"}}
+</script>
+{{script src="/mjs/comp-image/image.js" defer=1}}
+{{/if}}

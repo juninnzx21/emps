@@ -1,0 +1,294 @@
+{{if $lang == "en"}}
+    {{$str_select = "Select files"}}
+    {{$str_by_url = "By URL"}}
+    {{$str_delete = "Delete"}}
+    {{$str_cancel = "Cancel"}}
+    {{$str_no_descr = "(no description)"}}
+    {{$str_descr = "Description"}}
+    {{$str_change_file = "Change file"}}
+    {{$str_please_confirm = "Please confirm"}}
+    {{$str_delete_selected = "Delete selected files?"}}
+    {{$str_yes = "Yes"}}
+    {{$str_desc_title = "Photo description"}}
+    {{$str_text = "Text"}}
+    {{$str_file_name = "File name"}}
+    {{$str_file_name_help = "Please keep the name extension!"}}
+    {{$str_control_code = "Control code"}}
+    {{$str_control_code_help = "For advanced users!"}}
+    {{$str_save_changes = "Save Changes"}}
+    {{$str_by_url_title = "Download files from URL"}}
+    {{$str_links = "Links to files"}}
+    {{$str_links_help = "Can be multiple URLs. One per line."}}
+    {{$str_downloading = "Downloading files..."}}
+    {{$str_download = "Download files"}}
+    {{$str_change_file2 = "Replace file"}}
+    {{$str_upload = "Upload"}}
+    {{$str_download_by_url = "Download by URL"}}
+    {{$str_uploading_progress = "Uploading a new file..."}}
+    {{$str_file_link = "URL of the file"}}
+    {{$str_select_one = "Select a file"}}
+{{else}}
+    {{$str_select = "Выбрать файлы"}}
+    {{$str_by_url = "По ссылке"}}
+    {{$str_delete = "Удалить"}}
+    {{$str_cancel = "Отмена"}}
+    {{$str_no_descr = "(нет описания)"}}
+    {{$str_descr = "Описание"}}
+    {{$str_change_file = "Сменить файл"}}
+    {{$str_please_confirm = "Подтвердите, пожалуйста"}}
+    {{$str_delete_selected = "Удалить выбранные файлы?"}}
+    {{$str_yes = "Да"}}
+    {{$str_desc_title = "Описание файла"}}
+    {{$str_text = "Текст"}}
+    {{$str_file_name = "Имя файла"}}
+    {{$str_file_name_help = "Сохраняйте расширение имени файла!"}}
+    {{$str_control_code = "Управляющий код"}}
+    {{$str_control_code_help = "Для продвинутых пользователей!"}}
+    {{$str_save_changes = "Сохранить изменения"}}
+    {{$str_by_url_title = "Скачать файлы по ссылке"}}
+    {{$str_links = "Ссылки на файлы"}}
+    {{$str_links_help = "Можно много ссылок. Одна строка &ndash; одна ссылка."}}
+    {{$str_downloading = "Идёт скачивание файлов..."}}
+    {{$str_download = "Скачать файлы"}}
+    {{$str_change_file2 = "Заменить файл"}}
+    {{$str_upload = "Загрузить"}}
+    {{$str_download_by_url = "Скачать по ссылке"}}
+    {{$str_uploading_progress = "Идёт загрузка нового файла..."}}
+    {{$str_file_link = "Ссылка на файл"}}
+    {{$str_select_one = "Выбрать файл"}}
+{{/if}}
+<file-uploader inline-template pad="{{$pad}}">
+
+    <div class="file-uploader">
+
+
+        <input type="file" multiple id="files" ref="files" @change="handle_uploads()"/>
+
+        <div class="columns is-gapless">
+            <div class="column is-narrow buttons">
+                <button type="button" @click="add_files()" class="button is-primary is-outlined">
+                    <i class="fa fa-hand-pointer-o"></i> &nbsp; {{$str_select}}</button>
+                <div></div>
+            </div>
+            <div class="column is-narrow buttons">
+                <button type="button" @click="download_files()" class="button is-primary is-outlined">
+                    <i class="fa fa-download"></i> &nbsp; {{$str_by_url}}</button>
+                <div></div>
+            </div>
+            <div class="column">
+                <div class="button-size is-fullwidth">
+                    <progress class="progress is-info"
+                              v-if="is_uploading()"
+                              :value="get_total_progress()" max="100"></progress>
+                </div>
+
+            </div>
+            <div class="column buttons is-justified-end is-narrow">
+                <button type="button" @click="delete_selected()" v-if="!is_uploading()" class="button is-danger is-outlined">
+                    <i class="fa fa-remove"></i> &nbsp; {{$str_delete}}</button>
+                <button type="button" @click="cancel_all()" v-else class="button is-warning is-outlined">
+                    <i class="fa fa-ban"></i> &nbsp; {{$str_cancel}}</button>
+                <button type="button" class="button is-white" @click="inverse_selection()" >
+                    <i class="fa fa-check-square-o" ></i>
+                </button>
+            </div>
+        </div>
+
+        <div v-sortable="{onUpdate: on_sort_files, handle: '.handle'}">
+            <div class="box" v-for="(file, index) in files">
+                <div class="media">
+                    <div class="media-content">
+                        <div class="columns">
+                            <div class="column is-6">
+                                <p>
+                                    <a :href="file.url" target="_blank"><strong>{{"file.name"|js}}</strong></a>
+                                    <span class="tag is-light">{{"file.id"|js}}</span>
+                                    <span class="tag is-info" v-if="file.comment.length > 0">{{"file.comment"|js}}</span>
+                                </p>
+                                <p v-if="file.descr == ''">{{$str_no_descr}}</p>
+                                <p v-else>{{"file.descr"|js}}</p>
+                                <div class="buttons">
+                                    <button type="button" class="button is-small is-primary" @click="edit_descr(file)">
+                                        <i class="fa fa-pencil"></i> &nbsp; {{$str_descr}}
+                                    </button>
+                                    <button type="button"
+                                            @click="change_file(file)"
+                                            class="button is-small is-primary is-outlined">
+                                        <i class="fa fa-exchange"></i> &nbsp; {{$str_change_file}}
+                                    </button>
+                                    <button type="button" class="button is-small is-primary is-outlined">
+                                        <i class="fa fa-ellipsis-h"></i> &nbsp; {{$str_extra}}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="column is-4 has-text-centered">
+                                {{"format_size(file.size)"|js}}<br/>
+                                <small>{{"file.content_type"|js}}</small>
+                            </div>
+                            <div class="column is-2 has-text-right">
+                                &nbsp;<br/>
+                                <button type="button"
+                                        @click="delete_file(file)"
+                                        class="button is-outlined is-danger">
+                                    <i class="fa fa-remove"></i> &nbsp; {{$str_delete}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media-right has-text-right">
+                        <i class="button-size handle"><i class="fa fa-hand-grab-o"></i></i><br/>
+                        <div class="button-size"><input type="checkbox" class="image-check" v-model="file.mark"/></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{*<div v-sortable="{handle: '.handle'}">*}}
+        <div class="box" v-for="(file, index) in queue">
+            <div class="media">
+                <div class="media-content">
+                    <div class="columns">
+                        <div class="column is-6">
+                            <div class="content">
+                                <p>
+                                    <strong>{{"file.name"|js}}</strong>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="column is-4 has-text-centered">
+                            {{"format_size(file.size)"|js}}<br/>
+                            <div class="button-size is-fullwidth">
+                                <progress
+                                        class="progress is-info" :value="get_progress(file)" max="100"></progress>
+                            </div>
+                        </div>
+                        <div class="column is-2 has-text-right">
+                            &nbsp;<br/>
+                            <button type="button"
+                                    @click="cancel_upload(file)"
+                                    class="button is-outlined is-warning">
+                                <i class="fa fa-ban"></i> &nbsp; {{$str_cancel}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {{*                <div class="media-right">
+                                    <i class="button is-white handle"><i class="fa fa-hand-grab-o"></i></i>
+                                </div>*}}
+            </div>
+        </div>
+        {{*</div>*}}
+        <div class="field">Context: {{ context_id }}</div>
+
+        <modal id="deleteSelectedModal" size="sm">
+            <template slot="header">{{$str_please_confirm}}</template>
+
+            {{$str_delete_selected}}
+
+            <template slot="actions">
+                <button type="button" class="button is-danger" @click="delete_selected_do()">{{$str_yes}}</button>
+            </template>
+        </modal>
+
+        <modal id="descrModal" :submit="submit_descr">
+            <template slot="header">{{$str_desc_title}}</template>
+
+            <div class="field">
+                <label class="label">{{$str_text}}:</label>
+                <textarea v-model="selected_file.descr" class="textarea" rows="5"></textarea>
+            </div>
+            <div class="field">
+                <label class="label">{{$str_file_name}}:</label>
+                <input type="text" class="input" v-model="selected_file.file_name" />
+                <div class="help">{{$str_file_name_help}}</div>
+            </div>
+            <div class="field">
+                <label class="label">{{$str_control_code}}:</label>
+                <input type="text" class="input" v-model="selected_file.comment" />
+                <div class="help is-warning">{{$str_control_code_help}}</div>
+            </div>
+
+            <template slot="actions">
+                <button type="submit" class="button is-success">{{$str_save_changes}}</button>
+            </template>
+        </modal>
+
+        <modal id="importModal" :submit="submit_import">
+            <template slot="header">{{$str_by_url_title}}</template>
+
+            <div class="field" v-if="!importing">
+                <label class="label">{{$str_links}}:</label>
+                <textarea v-model="import_list" class="textarea" rows="5"></textarea>
+                <div class="help">{{$str_links_help}}</div>
+            </div>
+            <div v-if="importing" class="content">
+                <p>{{$str_downloading}}</p>
+                <progress class="progress is-warning"></progress>
+            </div>
+
+            <template slot="actions">
+                <button type="submit" class="button is-success" :disabled="importing">{{$str_download}}</button>
+            </template>
+        </modal>
+
+        <modal id="changeModal" :submit="submit_change">
+            <template slot="header">{{$str_change_file}}</template>
+
+            <div class="is-block">
+                <p>{{$str_change_file2}} <strong>{{"selected_file.file_name"|js}}</strong> <span class="tag">{{"selected_file.id"|js}}</span></p>
+
+                <div class="tabs is-block" style="margin-bottom: 1rem">
+                    <ul>
+                        <li :class="{'is-active': change_mode == 'upload'}" @click="change_mode = 'upload'">
+                            <a>{{$str_upload}}</a>
+                        </li>
+                        <li :class="{'is-active': change_mode == 'download'}" @click="change_mode = 'download'">
+                            <a>{{$str_download_by_url}}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div v-if="change_uploading" class="content">
+                    <p>{{$str_uploading_progress}}</p>
+                    <progress class="progress is-warning"></progress>
+                </div>
+
+                <div v-else>
+                    <div v-if="change_mode == 'upload'">
+                        <input type="file" id="change-file" ref="change_file" @change="handle_change_upload()"/>
+                        <button type="button" @click="select_change_file()" class="button is-primary is-outlined">
+                            <i class="fa fa-hand-pointer-o"></i> &nbsp; {{$str_select_one}}</button>
+
+                    </div>
+
+                    <div v-if="change_mode == 'download'">
+                        <input type="text" class="input" v-model="change_download_url" placeholder="{{$str_file_link}}" />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <template slot="actions">
+                <button type="submit" class="button is-success">{{$str_change_file2}}</button>
+            </template>
+        </modal>
+
+    </div>
+
+
+</file-uploader>
+
+<script src="/mjs/comp-files/files.js" defer></script>
+<script>
+    emps_scripts.push(function(){
+        EMPS.load_css('/mjs/comp-files/files.css');
+    });
+
+    {{if $lang == "en"}}
+    var string_failed = "Can't upload: ";
+    {{else}}
+    var string_failed = "Невозможно загрузить: ";
+    {{/if}}
+
+</script>

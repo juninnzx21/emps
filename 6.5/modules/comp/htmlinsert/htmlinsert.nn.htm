@@ -1,0 +1,305 @@
+{{if $lang == "en"}}
+    {{$str_insert_photo = "Insert a Photo"}}
+    {{$str_select_another = "Select another photo"}}
+    {{$str_pic_css = "Image CSS-class"}}
+    {{$str_class = "Class"}}
+    {{$str_insert_full_pic = "Insert full image"}}
+    {{$str_insert_small_pic = "Insert downsized image"}}
+    {{$str_lightbox = "Wrap the image in a lightbox"}}
+    {{$str_select_pic = "Select a photo to insert"}}
+    {{$str_upload_new = "Upload new"}}
+    {{$str_download_new = "Download new from a URL"}}
+    {{$str_uploading = "Uploading a new file..."}}
+    {{$str_select_file = "Select file"}}
+    {{$str_file_link = "Link to file"}}
+    {{$str_download_select = "Download and Select"}}
+    {{$str_insert_gallery = "Insert a Photo Gallery"}}
+    {{$str_click_pics = "Click images to select them"}}
+    {{$str_montage = "Montage"}}
+    {{$str_tile = "Tile"}}
+    {{$str_insert_all = "Insert all photos"}}
+    {{$str_insert_selected = "Insert selected photos"}}
+    {{$str_insert_video = "Insert a video"}}
+    {{$str_click_video = "Click on the video to insert"}}
+{{else}}
+    {{$str_insert_photo = "Вставка фотографии"}}
+    {{$str_select_another = "Выбрать другое фото"}}
+    {{$str_pic_css = "CSS-класс изображения"}}
+    {{$str_class = "Класс"}}
+    {{$str_insert_full_pic = "Вставить полное изображение"}}
+    {{$str_insert_small_pic = "Вставить уменьшенное"}}
+    {{$str_lightbox = "Обернуть в ссылку на lightbox"}}
+    {{$str_select_pic = "Выберите фото для вставки"}}
+    {{$str_upload_new = "Загрузить новую"}}
+    {{$str_download_new = "Скачать новую по ссылке"}}
+    {{$str_uploading = "Идёт загрузка нового файла..."}}
+    {{$str_select_file = "Выбрать файл"}}
+    {{$str_file_link = "Ссылка на файл"}}
+    {{$str_download_select = "Скачать и выбрать"}}
+    {{$str_insert_gallery = "Вставка фотогалереи"}}
+    {{$str_click_pics = "Нажимайте на фотографии для отбора"}}
+    {{$str_montage = "Монтаж"}}
+    {{$str_tile = "Плитка"}}
+    {{$str_insert_all = "Вставить все фото"}}
+    {{$str_insert_selected = "Вставить выбранные фото"}}
+    {{$str_insert_video = "Вставить видео"}}
+    {{$str_click_video = "Кликните на видео для вставки в текст"}}
+{{/if}}
+<html-insert inline-template id="{{$id}}" context_id="{{$context_id}}">
+    <div class="htmlinsert">
+        <modal id="htmlinsertPhotoModal" size="lg">
+            <template slot="header">{{$str_insert_photo}}</template>
+
+            <div v-if="insert_params.selected_pic.id !== undefined">
+                <div class="columns">
+                    <div class="column is-7">
+                        <div class="field">
+                            <div class="is-block container-4x3">
+                                <div class="zoom-pic">
+                                    <img :src="insert_params.selected_pic.url" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <button type="button"
+                                    @click="insert_params.selected_pic = {}"
+                                    class="button is-primary">
+                                <i class="fa fa-reply"></i> &nbsp; {{$str_select_another}}
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="column is-5">
+                        <div class="field">
+                            <label class="label">{{$str_pic_css}}:</label>
+
+                            <div class="field has-addons">
+                                <p class="control is-expanded">
+                                    <input type="text" class="input" v-model="insert_params.class" />
+                                </p>
+                                <p class="control">
+                                <div :class="['dropdown', 'is-right', {'is-active': select_class}]">
+                                    <div class="dropdown-trigger">
+                                        <button type="button"
+                                                @click="select_class = true"
+                                                class="button" aria-haspopup="true"
+                                                aria-controls="dropdown-pic-classes">
+                                            <span>{{$str_class}}</span>
+                                            <span class="icon is-small">
+        <i class="fa fa-angle-down" aria-hidden="true"></i>
+      </span>
+                                        </button>
+                                    </div>
+                                    <div class="dropdown-menu" id="dropdown-pic-classes" role="menu">
+                                        <div class="dropdown-content">
+                                            <a href="javascript:;" class="dropdown-item"
+                                               @click="insert_params.class = item.code; select_class = false"
+                                               v-for="(item, index) in classes">
+                                                {{"item.name"|js}}
+                                            </a>
+                                            <hr class="dropdown-divider">
+                                            <a href="javascript:;"
+                                               @click="insert_params.class = ''; select_class = false"
+                                               class="dropdown-item">
+                                                {{"no_class"|js}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="field has-text-right">
+                            <button type="button" class="button is-primary is-fullwidth" @click="insert_pic('full')">
+                                {{$str_insert_full_pic}} &nbsp; <i class="fa fa-hand-o-right"></i>
+                            </button>
+                        </div>
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input type="text" class="input" v-model="insert_params.picsize" placeholder="Макс. размер"/>
+                            </div>
+                            <div class="control">
+                                <button type="button" class="button is-primary" @click="insert_pic('reduced')">
+                                    {{$str_insert_small_pic}} &nbsp; <i class="fa fa-hand-o-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <label class="checkbox">
+                            <input type="checkbox" v-model="insert_params.lightbox">
+                            {{$str_lightbox}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div v-else>
+                <div class="field">
+                    {{$str_select_pic}}:
+                </div>
+
+                <div class="columns is-gapless is-mobile is-multiline">
+                    <div class="column is-2 is-4-mobile" v-for="(pic, index) in pics">
+                        <div class="container-4x3">
+                            <a class="pic" @click="select_pic(pic)">
+                                <img :src="pic.thumbnail" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="is-block">
+                    <div class="tabs is-block" style="margin-bottom: 1rem">
+                        <ul>
+                            <li :class="{'is-active': insert_params.new_mode == 'upload'}"
+                                @click="insert_params.new_mode = 'upload'">
+                                <a>{{$str_upload_new}}</a>
+                            </li>
+                            <li :class="{'is-active': insert_params.new_mode == 'download'}"
+                                @click="insert_params.new_mode = 'download'">
+                                <a>{{$str_download_new}}</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div v-if="insert_params.uploading" class="content">
+                        <p>{{$str_uploading}}</p>
+                        <progress class="progress is-warning"></progress>
+                    </div>
+
+                    <div v-else>
+                        <div v-if="insert_params.new_mode == 'upload'">
+                            <input type="file" ref="new_photo" @change="handle_new_upload()"/>
+                            <button type="button" @click="select_new_photo()" class="button is-primary is-outlined">
+                                <i class="fa fa-hand-pointer-o"></i> &nbsp; {{$str_select_file}}</button>
+
+                        </div>
+
+                        <div v-if="insert_params.new_mode == 'download'">
+                            <div class="field is-grouped">
+                                <p class="control is-expanded">
+                                    <input type="text" class="input"
+                                           v-model="insert_params.download_url" placeholder="{{$str_file_link}}" />
+                                </p>
+                                <p class="control">
+                                    <a class="button is-primary is-outlined" @click="handle_new_upload()">
+                                        {{$str_download_select}}
+                                    </a>
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </modal>
+
+        <modal id="htmlinsertPhotosetModal" size="lg">
+            <template slot="header">{{$str_insert_gallery}}</template>
+
+            <div class="field">
+                {{$str_click_pics}}:
+            </div>
+
+            <div class="columns is-gapless is-mobile is-multiline">
+                <div class="column is-2 is-4-mobile" v-for="(pic, index) in pics">
+                    <div class="container-4x3">
+                        <a class="pic" @click="check_pic(pic)">
+                            <img :src="pic.thumbnail" />
+                            <div class="pic-sel" v-if="pic.checked">
+                                <i class="fa fa-check"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="columns">
+                <div class="column">
+                    <div class="control">
+                        <label class="radio">
+                            <input type="radio" name="type" value="montage" v-model="insert_params.photoset_type">
+                            {{$str_montage}}
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="type" value="photoreport" v-model="insert_params.photoset_type">
+                            {{$str_tile}}
+                        </label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="buttons">
+                        <button type="button"
+                                class="button is-primary" @click="insert_pics('all')">{{$str_insert_all}} &nbsp;
+                            <i class="fa fa-hand-o-right"></i></button>
+                        <button type="button"
+                                class="button is-primary" @click="insert_pics('sel')">{{$str_insert_selected}} &nbsp;
+                            <i class="fa fa-hand-o-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+
+        </modal>
+
+        <modal id="htmlinsertVideosModal" size="lg">
+            <template slot="header">{{$str_insert_video}}</template>
+
+            <div class="field">
+                {{$str_click_video}}:
+            </div>
+
+            <div class="columns is-gapless is-mobile is-multiline">
+                <div class="column is-2 is-4-mobile" v-for="(video, index) in videos">
+                    <div class="container-16x9">
+                        <a class="pic" @click="insert_video(video)">
+                            <img :src="pic_url(video.pic)" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </modal>
+
+    </div>
+</html-insert>
+{{script src="/mjs/comp-htmlinsert/htmlinsert.js" defer=1}}
+<script type="application/javascript">
+    emps_scripts.push(function(){
+        EMPS.load_css('/mjs/comp-htmlinsert/htmlinsert.css');
+    });
+    {{if $lang == "en"}}
+    var emps_pic_classes = [
+        {code: 'pic-full', name: '100% width'},
+        {code: 'pic-3-right', name: '1/4 → right'},
+        {code: 'pic-4-right', name: '1/3 → right'},
+        {code: 'pic-6-right', name: '1/2 → right'},
+        {code: 'pic-3-left', name: '1/4 ← left'},
+        {code: 'pic-4-left', name: '1/3 ← left'},
+        {code: 'pic-6-left', name: '1/2 ← left'},
+        {code: 'pic-6-center', name: '1/2 по центру'},
+    ];
+    var emps_pic_no_class = 'No CSS class';
+
+    {{else}}
+    var emps_pic_classes = [
+        {code: 'pic-full', name: '100% ширины'},
+        {code: 'pic-3-right', name: '1/4 → справа'},
+        {code: 'pic-4-right', name: '1/3 → справа'},
+        {code: 'pic-6-right', name: '1/2 → справа'},
+        {code: 'pic-3-left', name: '1/4 ← слева'},
+        {code: 'pic-4-left', name: '1/3 ← слева'},
+        {code: 'pic-6-left', name: '1/2 ← слева'},
+        {code: 'pic-6-center', name: '1/2 по центру'},
+    ];
+    var emps_pic_no_class = 'Не присваивать класс';
+
+    {{/if}}
+</script>

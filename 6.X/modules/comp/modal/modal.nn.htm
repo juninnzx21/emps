@@ -1,0 +1,10 @@
+{{if !$comp_modal_included}}
+    {{assign var="comp_modal_included" value=true scope="global"}}
+
+<script type="text/x-template" id="modal-component-template">
+    <div>
+    </div>
+</script>
+{{script src="/mjs/comp-modal/modal.js" defer=1}}
+
+{{/if}}

@@ -1,0 +1,13 @@
+<block-template>
+    <title>Header</title>
+    <params>
+        <param name="level" title="Level" type="c" default="1" />
+        <param name="class" title="Class" type="c" default="" />
+        <param name="blocks" title="Blocks Array" type="ab" template="" default="" />
+    </params>
+    <block>
+        <h add-tag="level" add-class="class">
+            <array param="blocks" />
+        </h>
+    </block>
+</block-template>

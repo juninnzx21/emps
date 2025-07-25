@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html{{if $page.adminpage }} class="admin"{{/if}} lang="{{if $html_lang}}{{$html_lang}}{{else}}ru{{/if}}" {{include file="db:html_tag_extra"}}>
+<head>
+<title>{{if $page.title}}{{$page.title|escape:html}}{{else}}{{include file="db:page/mainhead"}}{{/if}}{{include file="db:page/everytitle"}}</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="keywords" content="{{eval var=$page.keywords|escape:html}}" />
+<meta name="description" content="{{eval var=$page.descr|escape:html}}" />
+<meta name="rating" content="general" />
+<meta name="distribution" content="global" />
+<meta name="objecttype" content="document" />
+{{if $page.robots}}
+<meta name="robots" content="{{$page.robots}}" />
+{{else}}
+<meta name="robots" content="index,follow" />
+{{/if}}
+{{if "sitemap"|emps:module_exists }}
+<link rel="sitemap" href="/sitemap/index.xml" />
+{{/if}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{{if $page.canonical}}
+<link rel="canonical" href="{{$page.canonical}}" />
+<meta property="og:url" content="{{$page.canonical}}" />
+{{/if}}
+{{$sitename = "page/mainhead"|emps:get_setting}}
+{{if $sitename}}
+<meta property="og:site_name" content="{{$sitename|escape:html}}" />
+{{/if}}
+{{if $page.image_src}}
+<link rel="image_src" href="{{$page.image_src}}" />
+<meta property="og:image" content="{{$page.image_src}}" />
+{{/if}}
+{{if $page.title}}
+<meta property="og:title" content="{{$page.title|escape:html}}" />
+{{/if}}
+{{if $page.descr}}
+<meta property="og:description" content="{{eval var=$page.descr|escape:html}}" />
+{{/if}}
+{{if "twitter_metatags"|emps:get_setting}}
+    {{include file="db:page/twitter/tags"}}
+{{/if}}
+{{include file="db:page/extraheadtags"}}
+{{include file="db:page/headscripts"}}
+{{if $no_html_scroll}}
+<style>html {overflow-Y: auto; scrollbar-width: thin}</style>
+{{/if}}
+</head>

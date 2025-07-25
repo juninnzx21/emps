@@ -1,0 +1,32 @@
+{{if $page.adminpage }}
+    <div>&nbsp;</div>
+</div>
+{{else}}
+
+{{include file="db:site/foot"}}
+
+{{/if}}  
+
+{{include file="db:page/commonfoot"}}
+{{include file="db:page/footscripts"}}
+
+{{if !$page.noscripts && !$page.notracking}}
+{{include file="db:inc/google"}}
+{{/if}}
+
+<div class="bottom-page">
+{{$smarty.capture.bottomPage}}
+</div>
+{{emps method="display_log"}}
+{{if $page.css_fw != "bulma" && $page.css_fw != "bootstrap4"}}
+<div id='ajax-wait' style='display:none;'></div>
+<iframe name="emps_sink" id="emps_sink" frameborder="0"></iframe>
+{{/if}}
+
+<script type="text/javascript" src="/js/emps_scripts.js" defer></script>
+{{if !("skip_ag38"|emps:get_setting)}}
+<!-- EMPS Framework Developed by: https://www.ag38.ru/ -->
+{{/if}}
+
+
+</body></html>

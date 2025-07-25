@@ -1,0 +1,22 @@
+[
+  {
+    "from": "/^pm\\.max_children = /",
+    "to": "pm.max_children = 512"
+  },
+  {
+    "from": "/^pm\\.start_servers = /",
+    "to": "pm.start_servers = 4"
+  },
+  {
+    "from": "/^pm\\.min_spare_servers = /",
+    "to": "pm.min_spare_servers = 4"
+  },
+  {
+    "from": "/^pm\\.max_spare_servers = /",
+    "to": "pm.max_spare_servers = 512"
+  },
+  {
+    "from": "/^(|;)pm\\.max_requests = /",
+    "to": "pm.max_requests = 8"
+  }
+]

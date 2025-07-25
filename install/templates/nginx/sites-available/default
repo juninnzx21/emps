@@ -1,0 +1,15 @@
+server {
+    listen			80 default_server;
+    listen			[::]:80 default_server;
+    server_name		_;
+    root 			/srv/www/htdocs/;
+
+    index index.php index.html;
+
+    access_log		/var/log/nginx/default.log awstats;
+    error_log		/var/log/nginx/default.error.log error;
+
+    include /etc/nginx/rewrite.conf;
+
+    include /etc/nginx/gzip.conf;
+}

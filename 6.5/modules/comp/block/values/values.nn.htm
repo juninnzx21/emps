@@ -1,0 +1,9 @@
+{{if !$comp_block_values_included}}
+    {{var comp_block_values_included=true}}
+    <script type="text/x-template" id="block-values-component-template">
+        <div>
+        </div>
+    </script>
+    {{script src="/mjs/comp-block-values/values.js" defer=1}}
+    {{include file="db:_comp/block/params"}}
+{{/if}}

@@ -1,0 +1,85 @@
+{{if $lang == "en"}}
+    {{var str_save = "Save Changes"}}
+    {{var str_parent = "Parent Website"}}
+    {{var str_sites = "Websites"}}
+    {{var str_select_site = "Select a website"}}
+    {{var str_language_code = "Language Code"}}
+    {{var str_publish = "Publish"}}
+{{else}}
+    {{var str_parent = "Вышестоящий сайт"}}
+    {{var str_save = "Сохранить изменения"}}
+    {{var str_sites = "Вебсайты"}}
+    {{var str_select_site = "Выбрать сайт"}}
+    {{var str_language_code = "Код языка"}}
+    {{var str_publish = "Публиковать"}}
+{{/if}}
+
+<form @submit="submit_form">
+
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label class="label">{{$str_name}}:</label>
+                <input type="text" class="input" v-model="selected_row.name" />
+            </div>
+            <div class="field">
+                <label class="label">{{$str_hostname}}:</label>
+                <input type="text" class="input" v-model="selected_row.hostname" />
+            </div>
+            <div class="field">
+                <label class="label">{{$str_hostname_regex}}:</label>
+                <input type="text" class="input" v-model="selected_row.hostname_filter" />
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label class="label">{{$str_parent}}:</label>
+                <div class="control">
+                    <div is="selector"
+                         v-model="selected_row.parent"
+                         title="{{$str_sites}}"
+                         placeholder="{{$str_select_site}}"
+                         :search="true"
+                         :type="'e_websites|id<>' + row.id">
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">{{$str_status}}:</label>
+                <span class="select is-fullwidth">
+                    <select v-model="selected_row.status">
+                        <option v-for="(erow, index) in enums.websitestatus"
+                                :value="erow.code">{{"erow.value"|js}}</option>
+                    </select>
+                </span>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">{{$str_language_code}}:</label>
+                        <input type="text" class="input" v-model="selected_row.lang" />
+                        <div class="help">&mdash; code ('<strong>en</strong>', '<strong>ru</strong>'). <strong>nn</strong> for default</div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">{{$str_publish}}:</label>
+                        <span class="select is-fullwidth">
+                            <select v-model="selected_row.pub">
+                                <option v-for="(erow, index) in enums.publish"
+                                :value="erow.code">{{"erow.value"|js}}</option>
+                            </select>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column field has-text-right">
+            <button type="submit" class="button is-medium is-primary">{{$str_save}}</button>
+        </div>
+    </div>
+
+</form>

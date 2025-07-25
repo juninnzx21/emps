@@ -1,0 +1,129 @@
+{{if $lang == "en"}}
+    {{$str_select = "Select Files"}}
+    {{$str_full = "Full Uploader"}}
+    {{$str_select1 = "Select File"}}
+{{else}}
+    {{$str_select = "Выбрать файлы"}}
+    {{$str_full = "Детальный загрузчик"}}
+    {{$str_select1 = "Выбрать файл"}}
+{{/if}}
+<script type="text/x-template" id="uploads-photos-component-template">
+    <div class="file-uploader">
+        <input type="file" multiple id="files" ref="files" @change="handle_uploads()"/>
+
+        <div :class="{'columns is-mobile is-multiline is-gapless': true, 'is-centered': centered}">
+            <template v-if="(queue.length > 0) && !noImage">
+                <div :class="{'column': true, 'is-3': cols == 4, 'is-full': cols == 1, 'is-half': cols == 2, 'is-4': cols == 3}" v-for="(file, index) in queue">
+                    <div class="container-1x1 field">
+                        <div class="image up-upload-image">
+                            <a :href="file.url" target="_blank"><img :src="file.image_url" style="width: 100%"/></a>
+                        </div>
+                        <div v-if="!single" class="up-upload-button">
+                            <button type="button"
+                                    v-if="!readOnly"
+                                    @click="delete_queue(index)"
+                                    class="button is-outlined is-danger is-small">
+                                <i class="fa fa-trash"></i>
+                            </button>&nbsp;
+                            <strong v-if="!noName"><a :href="file.url" class="has-text-white" target="_blank">{{"file.name"|js}}</a></strong>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template v-else-if="!noImage">
+                <div :class="{'column': true, 'is-3': cols == 4, 'is-full': cols == 1, 'is-half': cols == 2, 'is-4': cols == 3}" v-for="(file, index) in files">
+                    <div class="container-1x1 field">
+                        <div class="image up-upload-image">
+                            <a :href="file.url" target="_blank"><img :src="file.url"/></a>
+                        </div>
+                        <div v-if="!single" class="up-upload-button">
+                            <button type="button"
+                                    v-if="!readOnly"
+                                    @click="delete_file(file)"
+                                    class="button is-outlined is-danger is-light is-small">
+                                <i class="fa fa-trash"></i>
+                            </button>&nbsp;
+                            <strong v-if="!noName"><a :href="file.url" class="has-text-white" target="_blank">{{"file.name"|js}}</a></strong>
+                        </div>
+
+                    </div>
+                </div>
+                <template v-if="(files.length == 0) && (defaultimg !== null)">
+                    <div :class="{'column': true, 'is-3': cols == 4, 'is-full': cols == 1, 'is-half': cols == 2, 'is-4': cols == 3}">
+                        <div class="image up-upload-image">
+                            <a :href="defaultimg"><img :src="defaultimg"/></a>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <div class="column" v-if="single">
+                <div class="field"  v-for="(file, index) in files">
+                    <button type="button"
+                            v-if="!readOnly"
+                            @click="delete_file(file)"
+                            class="button is-outlined is-danger is-small">
+                        <i class="fa fa-trash"></i>
+                    </button>&nbsp;
+                    <strong v-if="!noName"><a :href="file.url" target="_blank">{{"file.name"|js}}</a></strong>
+                </div>
+
+                <div :class="{'columns is-variable is-2': true, 'is-multiline': cols == 1}">
+                    <div :class="{'column is-narrow buttons': cols != 1, 'column is-full': cols == 1}">
+                        <button
+                                v-if="!readOnly"
+                                type="button" @click="add_files()" class="button is-primary is-outlined is-fullwidth">
+                            <i class="fa fa-hand-pointer-o"></i> &nbsp;
+                            <template v-if="label !== null">{{"label"|js}}</template>
+                            <template v-else>{{$str_select1}}</template>
+                            </button>
+                        <div v-if="cols !=1"></div>
+                    </div>
+                    <div :class="{'column': cols != 1, 'column is-full': cols == 1}">
+                        <div class="button-size is-fullwidth">
+                            <progress class="progress is-info"
+                                      v-if="is_uploading()"
+                                      :value="get_total_progress()" max="100"></progress>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="columns is-variable is-2" v-if="!single && !readOnly"">
+            <div class="column is-narrow buttons">
+                <button
+                        type="button" @click="add_files()" class="button is-primary is-outlined">
+                    <i class="fa fa-hand-pointer-o"></i> &nbsp;
+                    <template v-if="label !== null">{{"label"|js}}</template>
+                    <template v-else>{{$str_select}}</template>
+                </button>
+                <a v-if="fullLink" :href="'/admin-context-photos/' + context + '/'" class="button is-link is-outlined" target="_blank">
+                    {{$str_full}}
+                </a>
+                <div></div>
+            </div>
+            <div class="column">
+                <div class="button-size is-fullwidth">
+                    <progress class="progress is-info"
+                              v-if="is_uploading()"
+                              :value="get_total_progress()" max="100"></progress>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</script>
+<script src="/mjs/comp-uploads-photos/photos.js" defer></script>
+<script>
+    emps_scripts.push(function(){
+        EMPS.load_css('/mjs/comp-uploads-photos/photos.css');
+    });
+
+    {{if $lang == "en"}}
+    var string_failed = "Can't upload: ";
+    {{else}}
+    var string_failed = "Невозможно загрузить: ";
+    {{/if}}
+
+</script>

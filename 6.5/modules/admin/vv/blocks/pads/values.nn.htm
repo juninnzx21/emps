@@ -1,0 +1,66 @@
+<div :class="{'blocks-interface': true, 'expanded': expanded}">
+
+<div class="columns">
+    <div class="column is-narrow" style="width: 30rem">
+        <div class="columns">
+            <div class="column">
+                <h2 class="is-size-4">Состав блока:</h2>
+            </div>
+            <div class="column is-narrow">
+                <button type="button" @click="save_and_preview"
+                        class="button is-primary is-light" title="Cохранить и показать">
+                    <i class="fa fa-save"></i>&nbsp;&nbsp;
+                    <i class="fa fa-arrow-right"></i>&nbsp;&nbsp;
+                    <i class="fa fa-eye"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-block is-block is-scrollable-pad" id="scrollable">
+            <block-values ref="values" prefix="root" @saved="preview" :ctx="row.own_context_id" :id="row.id"></block-values>
+            </div>
+        </div>
+
+        <imagesel mode="common" cl="is-4by3" :context="row.own_context_id"></imagesel>
+
+        <div class="has-text-right mt-3">
+            <button type="button" @click="save_and_preview"
+                    class="button is-primary is-light" title="Cохранить и показать">
+                <i class="fa fa-save"></i>&nbsp;&nbsp;
+                <i class="fa fa-arrow-right"></i>&nbsp;&nbsp;
+                <i class="fa fa-eye"></i>
+            </button>
+        </div>
+    </div>
+    <div class="column">
+        <div class="columns">
+            <div class="column">
+                <h2 class="is-size-4">Предпросмотр:</h2>
+            </div>
+            <div class="column is-narrow">
+                <button type="button" @click="toggle('mobile')"
+                        class="button is-primary is-light" title="Мобильный / десктоп">
+                    <i class="fa fa-mobile" v-if="!mobile"></i>
+                    <i class="fa fa-desktop" v-else></i>
+                </button>
+            </div>
+            <div class="column is-narrow">
+                <button type="button" @click="toggle('expanded')"
+                        class="button is-primary is-light" title="Развернуть / свернуть">
+                    <i class="fa fa-expand"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div :class="{'panel-block is-block is-scrollable-pad': true, 'preview-mobile': mobile}" style="overflow-y: hidden">
+                <block-preview ref="preview" :id="row.id">
+
+                </block-preview>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>

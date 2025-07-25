@@ -1,0 +1,53 @@
+{{if !$comp_multiselect_included}}
+    {{if $lang == "en"}}
+        {{$str_select = "Select Items"}}
+    {{else}}
+        {{$str_select = "Выбрать значения"}}
+    {{/if}}
+
+    {{var comp_multiselect_included=true}}
+
+    <script type="text/x-template" id="multiselect-component-template">
+        <div>
+            <div v-if="readOnly">
+                <div class="input" v-html="description">
+                </div>
+            </div>
+            <div v-else :class="[{'field': !noField}, {'has-addons': !noClear}]">
+                <p class="control is-expanded">
+                    <input class="input" :value="description" :placeholder="placeholder" readonly="readonly" @click="select"/>
+                </p>
+                <p class="control" v-if="!noClear">
+                    <a class="button" @click="clear">
+                        <i class="fa fa-remove"></i>
+                    </a>
+                </p>
+            </div>
+
+            <modal :id="modal_name()" :size="size" >
+                <template slot="header">
+                    {{$str_select}}: <span v-html="title"></span>
+                </template>
+
+                <div class="panel">
+                    <a href="javascript:;" @click="toggle(erow.code)"
+                       :class="{'panel-block is-block': true,
+                       'has-background-success-light': has_value(erow.code)}"
+                       v-for="(erow,eri) in e">
+                        <span class="is-inline-block" style="width: 2em">
+                            <i class="fa fa-check-square-o" v-if="has_value(erow.code)"></i>
+                            <i class="fa fa-square-o" v-else></i>
+                        </span>
+                        {{ erow.value }}
+                    </a>
+                </div>
+
+                <template slot="actions">
+                    <button type="button" class="button is-primary" @click.stop.prevent="set_value">Установить</button>
+                </template>
+
+            </modal>
+        </div>
+    </script>
+    {{script src="/mjs/comp-multiselect/multiselect.js" defer=1}}
+{{/if}}

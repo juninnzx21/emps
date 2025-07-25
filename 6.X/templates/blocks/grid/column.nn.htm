@@ -1,0 +1,15 @@
+<block-template>
+    <title>Column</title>
+    <params>
+        <param name="class" title="{{if $lang == "en"}}Classes{{else}}Классы{{/if}}" type="c" default="" />
+        <param name="blocks" title="{{if $lang == "en"}}Blocks{{else}}Блоки{{/if}}"
+               template=""
+               type="ab" default="" />
+
+    </params>
+    <block>
+        <div class="column" add-class="class">
+            <array param="blocks" />
+        </div>
+    </block>
+</block-template>

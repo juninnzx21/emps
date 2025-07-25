@@ -1,0 +1,7 @@
+Имя: {{$row.name}}<br />
+Телефон: {{$row.phone}}<br />
+{{if $row.utm}}
+UTM: {{$row.utm|json_encode}}<br/>
+{{/if}}
+Сообщение:<br/>
+{{$row.msg|nl2br}}

@@ -1,0 +1,16 @@
+<block-template>
+    <title>Banner with Link</title>
+    <params>
+        <param name="class" title="Class" type="c" default="is-block" />
+        <param name="imgclass" title="IMG Class" type="c" default="mask" />
+        <param name="name" title="Title" type="c" default="" />
+        <param name="link" title="URL" type="t" default="" />
+        <param name="target" title="Target" type="c" default="_self" />
+        <param name="image" title="Image" type="photo" template="" default="" />
+    </params>
+    <block>
+        <a add-class="class" title="[name]" href="[link]" target="[target]">
+            <img class="[imgclass]" alt="[name]" src="/pic/[image.md5]/[image.filename]" />
+        </a>
+    </block>
+</block-template>

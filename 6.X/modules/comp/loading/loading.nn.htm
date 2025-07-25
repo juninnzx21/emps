@@ -1,0 +1,22 @@
+{{if !$comp_loading_included}}
+    {{assign var="comp_loading_included" value=true scope="global"}}
+
+    <script type="text/x-template" id="loading-component-template">
+        <div>
+            <div class="columns is-centered" v-if="value">
+                <div class="column is-narrow" :style="{height: height + 'rem'}">
+                    <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                </div>
+            </div>
+
+        </div>
+    </script>
+    {{script src="/mjs/comp-loading/loading.js" defer=1}}
+
+    <script type="application/javascript">
+        emps_scripts.push(function(){
+            EMPS.load_css('/css/spinner.css');
+        });
+    </script>
+
+{{/if}}

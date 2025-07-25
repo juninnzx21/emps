@@ -1,0 +1,21 @@
+<form @submit="submit_form">
+
+    <div class="field">
+        <label class="label">Внутреннее название:</label>
+        <input type="text" class="input" v-model="selected_row.name" />
+    </div>
+
+    <div class="field">
+        <label class="label">Код:</label>
+        <input type="text" class="input" v-model="selected_row.code" />
+    </div>
+
+    <div class="field">
+        <label class="label">Код шаблона:</label>
+        <input type="text" class="input" v-model="selected_row.template" />
+    </div>
+
+    <p class="has-text-right">
+        <button type="submit" class="button is-medium is-primary">Сохранить изменения</button>
+    </p>
+</form>

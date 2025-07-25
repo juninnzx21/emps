@@ -1,0 +1,146 @@
+{{assign var="add_defer" value=""}}
+{{assign var="add_media" value="media=\"screen\""}}
+{{if $page.defer_js}}
+    {{assign var="add_defer" value="defer"}}
+{{/if}}
+{{if $page.defer_all}}
+    {{assign var="add_defer" value="defer"}}
+    {{assign var="add_media" value="media=\"none\" data-dynamic=\"true\""}}
+{{/if}}
+<script>
+    var emps_scripts = [];
+    var $lang = "{{$lang}}";
+    var css_reset = "{{"css_reset"|emps:get_setting}}";
+</script>
+
+{{if $page.css_fw == "bulma"}}
+    <link rel="preload" href="/bulma/css/bulma.min.css{{$page.css_reset}}" as="style">
+    <link href="/bulma/css/bulma.min.css{{$page.css_reset}}" rel="stylesheet" {{$add_media}}/>
+    <link href="/bulma/ext.css{{$page.css_reset}}" rel="stylesheet" {{$add_media}}/>
+    <link rel="preload" href="/font-awesome/css/font-awesome.min.css" as="style">
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" {{$add_media}}/>
+{{else}}
+{{/if}}
+
+{{if $page.line_awesome}}
+    <link rel="preload" href="/line-awesome/css/line-awesome.min.css" as="style">
+    <link href="/line-awesome/css/line-awesome.min.css" rel="stylesheet" {{$add_media}}/>
+{{/if}}
+
+{{if $page.toastr}}
+    <link href="/bower_components/toastr/toastr.min.css{{$page.css_reset}}" rel="stylesheet" {{$add_media}}/>
+{{/if}}
+
+{{include file="db:site/styles"}}
+
+<link rel="icon"
+      type="image/png"
+      href="/favicon.png"/>
+
+{{if !$page.noscripts}}
+    {{if "jquery_debug"|emps:get_setting == 1}}
+        <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{else}}
+        <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{/if}}
+{{/if}}
+
+<link href="/fonts/fonts.css" rel="stylesheet" {{$add_media}} />
+
+{{if $page.defer_all}}
+    <script src="/js/dynamic_css.js" defer></script>
+{{/if}}
+
+{{if $page.momentjs}}
+    <script type="text/javascript" src="/bower_components/moment/min/moment.min.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{if $lang != "en"}}
+        <script type="text/javascript" src="/bower_components/moment/locale/ru.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{/if}}
+{{/if}}
+
+{{if $page.flatpickr}}
+    <link rel="stylesheet" href="/node_modules/flatpickr/dist/flatpickr.min.css{{$page.css_reset}}" {{$add_media}}/>
+    <script src="/node_modules/flatpickr/dist/flatpickr.min.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{if $lang == "ru"}}
+        <script src="/node_modules/flatpickr/dist/l10n/ru.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{/if}}
+    <script>
+        var emps_flatpickr_options = {
+            locale: "{{$lang}}",
+            dateFormat: "d.m.Y",
+            time_24hr: true
+        };
+    </script>
+{{/if}}
+
+<script src="/js/emps.js{{$page.css_reset}}" defer></script>
+
+{{if $page.vuejs}}
+    <script>
+        emps_scripts.push(function(){
+            axios.defaults.headers.common['Data-Only'] = 'yes';
+        });
+    </script>
+    <script src="/js/i18n.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{if $page.vue_debug}}
+        <script src="/bower_components/axios/dist/axios.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{else}}
+        <script src="/bower_components/axios/dist/axios.min.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{/if}}
+    {{if $page.vue3}}
+        {{if $page.vue_debug}}
+            <script src="/node_modules/vue3/dist/vue.global.js{{$page.css_reset}}" {{$add_defer}}></script>
+        {{else}}
+            <script src="/node_modules/vue3/dist/vue.global.prod.js{{$page.css_reset}}" {{$add_defer}}></script>
+        {{/if}}
+    {{else}}
+        {{if $page.vue_debug}}
+            <script src="/bower_components/vue/dist/vue.js{{$page.css_reset}}" {{$add_defer}}></script>
+        {{else}}
+            <script src="/bower_components/vue/dist/vue.min.js{{$page.css_reset}}" {{$add_defer}}></script>
+        {{/if}}
+    {{/if}}
+
+    {{if $page.vue_numeric}}
+        <script src="/node_modules/accounting-js/dist/accounting.umd.js{{$page.css_reset}}" {{$add_defer}}></script>
+        <script src="/node_modules/vue-numeric/dist/vue-numeric.min.js{{$page.css_reset}}" {{$add_defer}}></script>
+        <script>
+            emps_scripts.push(function(){
+                Vue.use(VueNumeric.default);
+            });
+        </script>
+    {{/if}}
+{{/if}}
+
+
+{{if $page.tinymce}}
+    <script type="text/javascript" src="/bower_components/tinymce/tinymce.min.js{{$page.css_reset}}" {{$add_defer}}></script>
+
+    {{if $page.tinymce_vue}}
+        <script type="text/javascript"
+                src="/node_modules/@tinymce/tinymce-vue/lib/browser/tinymce-vue.min.js{{$page.css_reset}}" {{$add_defer}}></script>
+    {{/if}}
+{{/if}}
+
+{{if $page.fancybox}}
+    <script src="/node_modules/@fancyapps/ui/dist/fancybox/fancybox.umd.js{{$page.css_reset}}" {{$add_defer}}></script>
+    <link
+            rel="stylesheet"
+            href="/node_modules/@fancyapps/ui/dist/fancybox/fancybox.css{{$page.css_reset}}" {{$add_media}}
+    />
+{{/if}}
+
+{{if $page.recaptcha}}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+{{/if}}
+
+{{if $page.element_ui}}
+    <link rel="stylesheet" href="/node_modules/element-ui/lib/theme-chalk/index.css">
+    <script src="/node_modules/element-ui/lib/index.js"></script>
+{{/if}}
+
+{{include file="db:site/headscripts"}}
+
+{{if $smarty.capture.headscripts}}
+    {{$smarty.capture.headscripts}}
+{{/if}}

@@ -1,0 +1,148 @@
+{{if $lang == "en"}}
+    {{$str_totop = "To Top Level"}}
+    {{$str_create = "Create"}}
+    {{$str_open_by_id = "Open by ID"}}
+    {{$str_search = "Search"}}
+    {{$str_filters = "Filter"}}
+    {{$str_sorting = "Sorting"}}
+    {{$str_create_subsection = "Create Section"}}
+    {{$str_all = "All"}}
+    {{$str_select_all = "Select All"}}
+    {{$str_copy = "Copy"}}
+    {{$str_cut = "Cut"}}
+    {{$str_paste = "Paste"}}
+{{else}}
+    {{$str_totop = "На самый верх"}}
+    {{$str_create = "Создать"}}
+    {{$str_open_by_id = "Открыть по номеру"}}
+    {{$str_search = "Искать"}}
+    {{$str_filters = "Фильтры"}}
+    {{$str_sorting = "Сортировка"}}
+    {{$str_create_subsection = "Создать подраздел"}}
+    {{$str_all = "Все"}}
+    {{$str_select_all = "Выделить все"}}
+    {{$str_copy = "Копировать"}}
+    {{$str_cut = "Вырезать"}}
+    {{$str_paste = "Вставить"}}
+{{/if}}
+{{if $controls_type == "top"}}
+
+    {{if $Multilevel}}
+        <div class="field">
+            <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="{{$ToTopLink}}" @click="navigate('{{$ToTopLink}}', $event)">
+                            <i class="fa fa-level-up"></i> &nbsp; {{$str_totop}}</a></li>
+                    <li v-for="(level, index) in parents">
+                        <a :href="level.link" @click="navigate(level.link, $event)">{{"level.name"|js}}</a></li>
+                </ul>
+            </nav>
+        </div>
+    {{/if}}
+
+    <div class="vted-controls mb-3">
+        {{if $has_tree}}
+            <div class="field">
+                <button class="button is-default is-outlined" @click="toggle('show_tree')">
+                    <i class="fa fa-chevron-left" v-if="!show_tree"></i>
+                    <i class="fa fa-chevron-right" v-if="show_tree"></i>
+                    </button> &nbsp;
+            </div>
+        {{/if}}
+        {{if !$vted_no_create}}
+            <div class="field">
+                <button class="button is-primary is-outlined" @click="{{if $vted_create_immediately}}submit_create{{else}}create_new{{/if}}">
+                    <i class="fa fa-file-o"></i> &nbsp; {{$str_create}}</button> &nbsp;
+            </div>
+        {{/if}}
+
+        {{if $smarty.capture.vted_after_create}}
+            {{$smarty.capture.vted_after_create}}
+        {{/if}}
+
+        {{if !$vted_no_open}}
+            <form class="field has-addons" @submit="open_by_id">
+                <div class="control">
+                    <input class="input is-link" type="number" style="width: 7rem" v-model="lookup_id">
+                </div>
+                <div class="control">
+                    <button type="submit" class="button is-link is-outlined">
+                        <i class="fa fa-id-card"></i> &nbsp; {{$str_open_by_id}}
+                    </button>
+                </div>
+                &nbsp;
+            </form>
+            &nbsp;
+        {{/if}}
+
+        {{if !$vted_no_refresh}}
+            <div class="field">
+                <button class="button is-outlined is-info" @click="load_list()">
+                    <i class="fa fa-refresh"></i></button> &nbsp;
+            </div>
+        {{/if}}
+
+        {{if $vted_search}}
+            &nbsp;
+            <form class="field has-addons " @submit="search" style="flex: 2">
+                <div class="control is-expanded">
+                    <input class="input is-success is-fullwidth" type="text" style="min-width: 10em" v-model="search_text">
+                </div>
+                <div class="control">
+                    <button type="button" class="button is-success is-outlined" @click="clear_search('')">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+                <div class="control">
+                    <button type="submit" class="button is-success is-outlined">
+                        <i class="fa fa-search"></i> &nbsp; {{$str_search}}
+                    </button>
+                </div>
+                &nbsp;
+            </form>
+
+        {{/if}}
+        {{if $vted_filters}}
+            &nbsp;
+            <div class="field">
+                <button :class="{'button is-outlined': true, 'is-danger': has_filter(), 'is-info': !has_filter()}" @click="open_filter">
+                    <i class="fa fa-filter"></i> &nbsp; {{$str_filters}}</button>
+            </div>
+        {{/if}}
+        {{if $vted_sorting}}
+            &nbsp;
+            <div class="field">
+                <button :class="{'button is-outlined is-info': true}" @click="open_sorting">
+                    <i class="fa fa-sort"></i> &nbsp; {{$str_sorting}}</button>
+            </div>
+        {{/if}}
+        {{if $smarty.capture.vted_after_filter}}
+            &nbsp;
+            {{$smarty.capture.vted_after_filter}}
+        {{/if}}
+
+    </div>
+
+
+{{/if}}
+{{if $controls_type == "toptree"}}
+    <div class="is-flex-desktop">
+        <div class="field">
+            <button class="button is-primary is-outlined" @click="make_folder()">
+                <i class="fa fa-file-o"></i> &nbsp; {{$str_create_subsections}}</button> &nbsp;
+            <button class="button is-info is-outlined" @click.stop="navigate(all_items_link(), $event)">
+                <i class="fa fa-search"></i> &nbsp; {{$str_all}}</button> &nbsp;
+            <button class="button is-info is-outlined" @click.stop="refresh_tree">
+                <i class="fa fa-refresh"></i></button> &nbsp;
+        </div>
+    </div>
+{{/if}}
+
+{{if $controls_type == "selected"}}
+    <div class="buttons">
+        <button type="button" class="button" @click.stop="select_all"><i class="fa fa-check-square-o"></i>&nbsp; {{$str_select_all}}</button>
+        <button type="button" class="button" v-if="has_selected" @click.stop="copy_selected"><i class="fa fa-copy"></i>&nbsp; {{$str_copy}}</button>
+        <button type="button" class="button" v-if="has_selected" @click.stop="cut_selected"><i class="fa fa-cut"></i>&nbsp; {{$str_cut}}</button>
+        <button type="button" class="button" v-if="has_clipboard" @click.stop="paste"><i class="fa fa-paste"></i>&nbsp; {{$str_paste}}</button>
+    </div>
+{{/if}}

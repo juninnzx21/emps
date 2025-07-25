@@ -1,0 +1,24 @@
+<div class="content pt-3">
+<h1>Входящие сообщения с формы на странице Контакты</h1>
+</div>
+
+{{include file="db:page/paginator"}}
+<table class="table is-fullwidth">
+<tr valign="top" class="is-selected">
+<th width="60">ID</th>
+<th width="340">От кого</th>
+<th width="200">Получено</th>
+</tr>
+{{foreach from=$lst item="row"}}
+<tr valign="top" class="success">
+<td>{{$row.id}}</td>
+<td><a href="mailto:{{$row.email}}">{{$row.email}}</a></td>
+<td>{{$row.time}}&nbsp;</td>
+</tr>
+<tr valign="top">
+<td></td>
+<td colspan="2" style="padding:12px;padding-bottom:30px;">{{$row.msg}}</td>
+</tr>
+{{/foreach}}
+</table>
+{{include file="db:page/paginator"}}

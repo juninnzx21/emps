@@ -1,0 +1,42 @@
+<div>
+    <template v-if="mode == 'common'">
+
+        <modal id="modalImageCompSelector" size="container">
+            <template slot="header">Выбрать фотографию</template>
+            <template v-if="lst.length == 0">
+                <div class="notification is-warning">
+                    Фотографий в данном контексте пока нет
+                </div>
+                <div class="block">
+                    <a href="javascript:;" @click.stop.prevent="add_files">Загрузить фото</a>
+                </div>
+            </template>
+
+            <div class="columns is-multiline">
+                <div class="column is-one-fifth" v-for="(pic,pi) in lst">
+                    <a class="is-block" href="javascript:;" @click.stop.prevent="click_select(pic)">
+                        <figure :class="image_class">
+                            <img :src="'/freepic/' + pic.md5 + '/' + pic.filename + '?size=300x300&opts=inner,q70'" class="imagesel"/>
+                        </figure
+
+                    </a>
+                </div>
+            </div>
+            <div class="file-uploader">
+                <input type="file" multiple id="files" ref="files" @change="handle_uploads"/>
+            </div>
+            <template slot="actions">
+                <button type="button" @click.stop.prevent="click_clear" class="button is-warning">Очистить поле</button>
+                <button type="button" @click.stop.prevent="add_files" class="button is-info">Загрузить фото</button>
+            </template>
+        </modal>
+    </template>
+    <template v-else>
+        <a class="is-block" href="javascript:;" @click.stop.prevent="select_image">
+            <figure :class="image_class">
+                <img src="/i/b.gif" class="imagesel" v-if="!selected"/>
+                <img v-else :src="'/pic/' + selected.md5 + '/' + selected.filename" class="imagesel"/>
+            </figure>
+        </a>
+    </template>
+</div>

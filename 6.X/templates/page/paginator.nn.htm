@@ -1,0 +1,12 @@
+<nav class="pagination" role="navigation" aria-label="pagination">
+    <a class="pagination-previous" href="{{$pages.prev.link}}"{{$linkextra}}><i class="fa fa-chevron-left"></i></a>
+    <a class="pagination-next" href="{{$pages.next.link}}"{{$linkextra}}><i class="fa fa-chevron-right"></i></a>
+    <div class="pagination-list">
+        {{foreach from=$pages.pl item="page"}}
+            <div>
+                <a class="pagination-link {{if $page.sel}}is-current{{/if}}" aria-label="Страница {{$page.page}}"
+                href="{{$page.link}}">{{$page.page}}</a>
+            </div>
+        {{/foreach}}
+    </div>
+</nav>

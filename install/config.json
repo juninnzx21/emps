@@ -1,0 +1,9 @@
+{
+  "factory_hostname": "hostname",
+  "factory_root_pwd": "password",
+  "mysql_root_password": "password",
+  "main_user": "emps",
+  "user_password": "password",
+  "mysql_user_password": "password",
+  "phpmyadmin": "myadmin"
+}

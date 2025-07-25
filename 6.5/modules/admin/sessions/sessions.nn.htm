@@ -1,0 +1,26 @@
+<div class="content pt-3">
+    <h1>Access Sessions</h1>
+</div>
+
+<div class="table-container">
+<table class="table is-fullwidth">
+    <tr class="is-selected">
+        <th width="50">Id</th>
+        <th width="200">User</th>
+        <th width="150">IP</th>
+        <th width="250">Browser</th>
+        <th width="120">Created</th>
+        <th width="120">Updated</th>
+    </tr>
+    {{foreach name=i from=$lst item="row"}}
+        <tr>
+            <td>{{$row.id}}</td>
+            <td><a href="/admin-siteusers/{{$row.user.id}}/-/info/">{{$row.user.fullname}} ({{$row.user.id}})</a></td>
+            <td><a target="_blank" href="http://geoip.ag38.ru/?ip={{$row.ip}}">{{$row.ip}}</a></td>
+            <td>{{$row.browser.name}}</td>
+            <td>{{$row.cdt|emps:form_time}}</td>
+            <td>{{$row.dt|emps:form_time}}</td>
+        </tr>
+    {{/foreach}}
+</table>
+</div>

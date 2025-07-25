@@ -1,0 +1,16 @@
+<block-template>
+    <title>Panel</title>
+    <params>
+        <param name="title" title="Title" type="c" default="This a sample the panel title" />
+        <param name="class" title="Panel Class" type="c" default="is-primary" />
+        <param name="blocks" title="Blocks Array" type="ab" template="blocks/panel/block" default="" />
+    </params>
+    <block>
+        <nav class="panel" add-class="class">
+            <div class="panel-heading">
+                <value param="title" />
+            </div>
+            <array param="blocks" />
+        </nav>
+    </block>
+</block-template>

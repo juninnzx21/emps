@@ -1,0 +1,22 @@
+[
+  {
+    "from": "/^memory_limit = /",
+    "to": "memory_limit = 1024M"
+  },
+  {
+    "from": "/^post_max_size = /",
+    "to": "post_max_size = 512M"
+  },
+  {
+    "from": "/^upload_max_filesize = /",
+    "to": "upload_max_filesize = 512M"
+  },
+  {
+    "from": "/^max_file_uploads = /",
+    "to": "max_file_uploads = 100"
+  },
+  {
+    "from": "/^(|;)include_path = \"\\.:/",
+    "to": "include_path = \".:/srv/www/lib\""
+  }
+]

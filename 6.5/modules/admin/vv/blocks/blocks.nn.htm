@@ -1,0 +1,18 @@
+<h1>Редактор блоков контента</h1>
+
+{{script src="/mjs/admin-vv-blocks/blocks.js" defer=1}}
+{{script src="/mjs/comp-mixins/common.js" defer=1}}
+
+<div id="admin-blocks-app" style="display: none">
+
+    {{include file="db:_comp/vted"}}
+
+</div>
+<div class="app-loading">
+    {{include file="db:inc/spinner"}}
+</div>
+
+{{include file="db:_comp/block/values"}}
+{{include file="db:_comp/block/preview"}}
+{{include file="db:_comp/block/class"}}
+

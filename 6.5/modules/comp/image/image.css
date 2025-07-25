@@ -1,0 +1,11 @@
+img.imagesel {
+    border: 1px solid rgba(0,0,0,0.5);
+    object-fit: contain;
+}
+
+.file-uploader input[type="file"]
+{
+    position: absolute;
+    top: -100vh;
+    height: 0;
+}

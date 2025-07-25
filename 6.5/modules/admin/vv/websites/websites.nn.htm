@@ -1,0 +1,92 @@
+{{if $lang == "en"}}
+    {{var str_title = "Websites"}}
+    {{var str_name = "Name"}}
+    {{var str_hostname = "Hostname"}}
+    {{var str_hostname_regex = "Hostname regex"}}
+    {{var str_status = "Status"}}
+    {{var str_actions = "Actions"}}
+{{else}}
+    {{var str_title = "Вебсайты"}}
+    {{var str_name = "Название"}}
+    {{var str_hostname = "Имя хоста"}}
+    {{var str_hostname_regex = "Имя хоста regex"}}
+    {{var str_status = "Статус"}}
+    {{var str_actions = "Действия"}}
+{{/if}}
+
+<div class="content pt-3">
+    <h1>{{$str_title}}</h1>
+</div>
+
+{{script src="/mjs/comp-vted-mixins/enumval.js" defer=1}}
+{{script src="/mjs/admin-vv-websites/websites.js" defer=1}}
+
+<div id="e_websites_app" style="display: none">
+
+    {{capture name="vted_header"}}
+        <strong>{{"row.name"|js}}</strong> &nbsp; {{"row.hostname"|js}} <span class="tag is-primary"># {{"row.id"|js}}</span>
+    {{/capture}}
+
+    {{capture name="list"}}
+        {{include file="db:_comp/vted,controls" controls_type="top" vted_search=true}}
+
+        {{include file="db:page/vue_paginator"}}
+
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                <th width="10%">
+                    Id
+                </th>
+                <th width="20%">
+                    {{$str_name}}
+                </th>
+                <th width="17%">
+                    {{$str_hostname}}
+                </th>
+                <th width="17%">
+                    {{$str_hostname_regex}}
+                </th>
+                <th width="20%">
+                    {{$str_status}}
+                </th>
+                <th width="16%" class="has-text-right">
+                    {{$str_actions}}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(row, index) in lst">
+                <td>
+                    {{"row.id"|js}}
+                </td>
+                <td>
+                    <a :href="row.ilink" @click="navigate(row.ilink, $event)">{{"row.name"|js}}</a>
+                </td>
+                <td>
+                    <a :href="row.ilink" @click="navigate(row.ilink, $event)">{{"row.hostname"|js}}</a>
+                </td>
+                <td>
+                    <a :href="row.ilink" @click="navigate(row.ilink, $event)">{{"row.hostname_filter"|js}}</a>
+                </td>
+                <td>
+                    {{ enum_val('websitestatus', row.status) }}
+                </td>
+                <td>
+                    {{include file="db:_comp/vted,row_controls"}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        {{include file="db:page/vue_paginator"}}
+
+    {{/capture}}
+
+    {{include file="db:_comp/vted"}}
+
+</div>
+<div class="app-loading">
+    {{include file="db:inc/spinner"}}
+</div>
+

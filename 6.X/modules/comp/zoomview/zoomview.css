@@ -1,0 +1,14 @@
+.zoom-image {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: none;
+    width: auto;
+}
+
+.zoom-image.zoomed {
+    display: block;
+    width: auto !important;
+    height: auto !important;
+}

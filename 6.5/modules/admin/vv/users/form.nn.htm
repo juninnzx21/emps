@@ -1,0 +1,19 @@
+{{if $lang == "en"}}
+    {{$str_login = "Login Name"}}
+{{else}}
+    {{$str_login = "Логин"}}
+{{/if}}
+
+<div class="field is-horizontal">
+    <div class="field-label is-normal">
+        <label class="label">{{$str_login}}</label>
+    </div>
+    <div class="field-body">
+        <div class="field">
+            <div class="control">
+                <input class="input" type="text" placeholder="" v-model="new_row.username">
+            </div>
+        </div>
+    </div>
+
+</div>

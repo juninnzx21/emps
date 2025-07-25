@@ -1,0 +1,91 @@
+{{if $lang == "en"}}
+    {{$str_title = "Website Users"}}
+    {{$str_login = "Login"}}
+    {{$str_fullname = "Full Name"}}
+    {{$str_access = "Access"}}
+    {{$str_actions = "Actions"}}
+{{else}}
+    {{$str_title = "Пользователи сайта"}}
+    {{$str_login = "Логин"}}
+    {{$str_fullname = "Полное имя"}}
+    {{$str_access = "Права"}}
+    {{$str_actions = "Действия"}}
+{{/if}}
+
+<h1>{{$str_title}}</h1>
+
+<div id="e_users_app" style="display: none">
+
+    {{capture name="vted_header"}}
+        <strong>{{"row.username"|js}}</strong> &nbsp; {{"row.fullname"|js}} <span class="tag is-primary"># {{"row.id"|js}}</span>
+    {{/capture}}
+
+    {{capture name="list"}}
+        {{include file="db:_comp/vted,controls" controls_type="top" vted_search=true}}
+
+        {{include file="db:page/vue_paginator"}}
+
+    <div class="table-container">
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                <th width="10%">
+                    Id
+                </th>
+                <th width="20%">
+                    {{$str_login}}
+                </th>
+                <th width="5%">
+                    <i class="fa fa-globe"></i>
+                </th>
+                <th width="5%">
+                    <i class="fa fa-unlock"></i>
+                </th>
+                <th width="43%">
+                    {{$str_fullname}}
+                    <small class="is-pulled-right">{{$str_access}}</small>
+                </th>
+                <th width="17%" class="has-text-right">
+                    {{$str_actions}}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(row, index) in lst">
+                <td>
+                    {{"row.id"|js}}
+                </td>
+                <td>
+                    <a :href="row.ilink" @click="navigate(row.ilink, $event)">{{"row.username"|js}}</a>
+                </td>
+                <td>
+                    <i class="fa fa-globe" v-if="row.site > 0"></i>
+                </td>
+                <td>
+                    <i class="fa fa-unlock" v-if="row.status > 0"></i>
+                </td>
+                <td>
+                    <a :href="row.ilink" @click="navigate(row.ilink, $event)">{{"row.fullname"|js}}</a>
+                    <small class="is-pulled-right">{{"row.grp"|js}}</small>
+                </td>
+                <td>
+                    {{include file="db:_comp/vted,row_controls"}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+        {{include file="db:page/vue_paginator"}}
+
+    {{/capture}}
+
+    {{include file="db:_comp/vted"}}
+
+</div>
+<div class="app-loading">
+    {{include file="db:inc/spinner"}}
+</div>
+
+<script src="/mjs/admin-vv-users/users.js" defer></script>
+

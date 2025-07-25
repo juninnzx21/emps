@@ -1,0 +1,8 @@
+.blocks-elements {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(3, 1fr);
+}
+.blocks-elements a {
+    display: block;
+}

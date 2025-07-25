@@ -1,0 +1,299 @@
+{{if $lang == "en"}}
+    {{$str_sections = "Sections"}}
+    {{$str_below = "Below"}}
+    {{$str_name = "Name"}}
+    {{$str_actions = "Actions"}}
+    {{$str_back = "Back to List"}}
+    {{$str_section = "Section"}}
+    {{$str_create_title = "Create a new item"}}
+    {{$str_create = "Create"}}
+    {{$str_please_confirm = "Please confirm"}}
+    {{$str_delete_item = "Delete item"}}
+    {{$str_yes = "Yes"}}
+    {{$str_sorry = "Sorry"}}
+    {{$str_cant_load = "Can't find an item with this id."}}
+    {{$str_filters = "Filters"}}
+    {{$str_sorting = "Sorting"}}
+    {{$str_clear_filter = "Clear Filter"}}
+    {{$str_set_filter = "Set Filter"}}
+    {{$str_set_sorting = "Sort"}}
+{{else}}
+    {{$str_sections = "Подразделы"}}
+    {{$str_below = "Ниже"}}
+    {{$str_name = "Наименование"}}
+    {{$str_actions = "Действия"}}
+    {{$str_back = "Назад в список"}}
+    {{$str_section = "Подраздел"}}
+    {{$str_create_title = "Создать новый элемент"}}
+    {{$str_create = "Создать"}}
+    {{$str_please_confirm = "Подтвердите, пожалуйста"}}
+    {{$str_delete_item = "Удалить позицию"}}
+    {{$str_yes = "Да"}}
+    {{$str_sorry = "Извините"}}
+    {{$str_cant_load = "Невозможно загрузить элемент с указанным идентификатором."}}
+    {{$str_filters = "Фильтры"}}
+    {{$str_sorting = "Сортировка"}}
+    {{$str_clear_filter = "Очистить фильтр"}}
+    {{$str_set_filter = "Установить фильтр"}}
+    {{$str_set_sorting = "Сортировать"}}
+{{/if}}
+{{capture name="vted_inner"}}
+    <div>
+        {{$smarty.capture.commonhead}}
+        <div v-show="list_mode">
+            {{if $has_tree}}
+            <div class="columns">
+                <div class="column is-3" @click.stop="unselect_all_folders()" v-if="show_tree">
+                    <aside class="menu" >
+                        {{include file="db:_comp/vted,controls" controls_type="toptree"}}
+                        <p class="menu-label">
+                            {{$str_sections}}
+                        </p>
+                        <div class="emps-tree-left">
+                            <ul class="menu-list tree-list">
+                                <treeitem
+                                        v-for="(tree, index) in tree"
+                                        :item="tree"
+                                        @make_folder="make_folder"
+                                        @add_item="add_item"
+                                        @set_active="set_active"
+                                        @delete_folder="delete_folder"
+                                        @edit_folder="edit_folder"
+                                ></treeitem>
+                            </ul>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    </aside>
+                </div>
+                <div class="column">
+                    {{/if}}
+                    {{if $smarty.capture.list}}
+                        {{$smarty.capture.list}}
+                    {{else}}
+                        {{* Use a generic list: id, name *}}
+                        {{include file="db:_comp/vted,controls" controls_type="top"}}
+                        {{include file="db:page/vue_paginator"}}
+                        <table class="table is-fullwidth">
+                            <thead>
+                            <tr>
+                                <th width="10%">
+                                    Id
+                                </th>
+                                {{if $Multilevel}}
+                                    <th width="10%" class="has-text-centered">
+                                        {{$str_below}}
+                                    </th>
+                                    <th width="62%">
+                                        {{$str_name}}
+                                    </th>
+                                {{else}}
+                                    <th width="72%">
+                                        {{$str_name}}
+                                    </th>
+                                {{/if}}
+                                <th width="18%" class="has-text-right">
+                                    {{$str_actions}}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(row, index) in lst">
+                                <td>{{"row.id"|js}}</td>
+                                {{if $Multilevel}}
+                                    <td>
+                                        {{include file="db:_comp/vted,columns" column_type="children"}}
+                                    </td>
+                                {{/if}}
+                                <td><a :href="row.ilink" @click="navigate(row.ilink, $event)">{{"row.name"|js}}</a></td>
+                                <td>
+                                    {{include file="db:_comp/vted,row_controls"}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        {{include file="db:page/vue_paginator"}}
+                    {{/if}}
+                    {{if $has_tree}}
+                </div>
+            </div>
+            {{/if}}
+        </div>
+        <div v-show="!list_mode">
+            <div class="panel shaded" v-if="!struct_row">
+                <div class="panel-heading">
+                    <div class="columns">
+                        <div class="column is-size-4">
+                            {{if $smarty.capture.vted_header}}
+                                {{$smarty.capture.vted_header}}
+                            {{else}}
+                                {{"row.name"|js}} <span class="tag is-primary"># {{"row.id"|js}}</span>
+                            {{/if}}
+                        </div>
+                        <div class="column is-narrow">
+                            <div class="buttons">
+                                {{if $smarty.capture.buttons_pre}}
+                                    {{$smarty.capture.buttons_pre}}
+                                {{/if}}
+                                <a :href="back_link()" class="button is-link" @click="navigate(back_link(), $event)">
+                                    <i class="fa fa-reply"></i> &nbsp;
+                                    {{$str_back}}</a>
+                                {{if $smarty.capture.buttons_post}}
+                                    {{$smarty.capture.buttons_post}}
+                                {{/if}}
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="panel-block is-block">
+                    <div class="tabs" style="margin-bottom: 1rem">
+                        <ul>
+                            {{foreach from=$pads item="pad"}}
+                                <li :class="{'is-active': is_active_pad('{{$pad.code}}')}">
+                                    <a :href="pad_link('{{$pad.code}}')"
+                                       @click="navigate(pad_link('{{$pad.code}}'), $event)">{{$pad.title}}</a>
+                                </li>
+                            {{/foreach}}
+                        </ul>
+                    </div>
+
+                    {{foreach from=$pads item="pad"}}
+
+                        <div v-if="is_active_pad('{{$pad.code}}')">
+                            {{if $pad.view}}
+                                {{include file="{{$pad.view}}"}}
+                            {{/if}}
+                        </div>
+
+                    {{/foreach}}
+                </div>
+            </div>
+            <div class="panel" v-else>
+                <div class="panel-heading">
+                    <div class="columns">
+                        <div class="column is-size-4">
+                            {{$str_section}}:
+                            {{if $smarty.capture.vted_header}}
+                                {{$smarty.capture.vted_header}}
+                            {{else}}
+                                {{"row.name"|js}} <span class="tag is-primary"># {{"row.id"|js}}</span>
+                            {{/if}}
+                        </div>
+                        <div class="column is-narrow">
+                            {{if $smarty.capture.buttons_pre}}
+                                {{$smarty.capture.buttons_pre}}
+                            {{/if}}
+                            <a :href="back_link()" class="button is-link" @click="navigate(back_link(), $event)">
+                                <i class="fa fa-reply"></i> &nbsp;
+                                {{$str_back}}</a>
+                            {{if $smarty.capture.buttons_post}}
+                                {{$smarty.capture.buttons_post}}
+                            {{/if}}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="panel-block is-block">
+                    <div class="tabs" style="margin-bottom: 1rem">
+                        <ul>
+                            {{foreach from=$struct_pads item="pad"}}
+                                <li :class="{'is-active': is_active_pad('{{$pad.code}}')}">
+                                    <a :href="pad_link('{{$pad.code}}')"
+                                       @click="navigate(pad_link('{{$pad.code}}'), $event)">{{$pad.title}}</a>
+                                </li>
+                            {{/foreach}}
+                        </ul>
+                    </div>
+
+                    {{foreach from=$struct_pads item="pad"}}
+
+                        <div v-if="is_active_pad('{{$pad.code}}')">
+                            {{if $pad.view}}
+                                {{include file="{{$pad.view}}"}}
+                            {{/if}}
+                        </div>
+
+                    {{/foreach}}
+                </div>
+            </div>
+        </div>
+
+        <modal id="createModal" :submit="submit_create">
+            <template v-slot:header>
+                {{$str_create_title}}
+            </template>
+
+            {{include file=$form_name}}
+
+            <template v-slot:actions>
+                <button type="submit" class="button is-success">{{$str_create}}</button>
+            </template>
+        </modal>
+
+        <modal id="deleteRowModal" size="sm">
+            <template v-slot:header>{{$str_please_confirm}}</template>
+
+            {{$str_delete_item}} <strong>{{"selected_row.name"|js}}</strong>? <span class="tag is-primary">{{"selected_row.id"|js}}</span>
+
+            <template v-slot:actions>
+                <button type="button" class="button is-danger" @click="delete_selected_row()">{{$str_yes}}</button>
+            </template>
+        </modal>
+
+        <modal id="cantLoadRowModal" size="sm">
+            <template slot="header">{{$str_sorry}}</template>
+
+            {{$str_cant_load}}
+
+        </modal>
+
+        <modal id="vtedFilterModal" :size="filterSize">
+            <template v-slot:header>{{$str_filters}}</template>
+
+            {{if $smarty.capture.vted_filter}}
+                {{$smarty.capture.vted_filter}}
+            {{/if}}
+
+            <template v-slot:actions>
+                <button type="button" class="button is-warning" @click="clear_filter">{{$str_clear_filter}}</button>
+                <button type="button" class="button is-primary" @click="post_set_filter">{{$str_set_filter}}</button>
+            </template>
+        </modal>
+
+        <modal id="vtedSortModal" :size="sortSize">
+            <template v-slot:header>{{$str_sorting}}</template>
+
+            {{if $smarty.capture.vted_sorting}}
+                {{$smarty.capture.vted_sorting}}
+            {{/if}}
+
+            <template v-slot:actions>
+                <button type="button" class="button is-primary" @click="post_set_sorting">{{$str_set_sorting}}</button>
+            </template>
+        </modal>
+
+
+        {{$smarty.capture.extra_modals}}
+
+    </div>
+{{/capture}}
+{{if $vue3}}
+    {{capture append="vue_out"}}
+<script type="text/html" id="vted-template">
+{{$smarty.capture.vted_inner}}
+</script>
+    {{/capture}}
+    <vted filter-size="{{$filter_size}}" ref="vted"></vted>
+{{else}}
+    <vted filter-size="{{$filter_size}}" ref="vted" inline-template>
+        {{$smarty.capture.vted_inner}}
+    </vted>
+{{/if}}
+
+{{if !$has_out}}
+    {{include file="db:_comp/vted,vted_out"}}
+{{/if}}
