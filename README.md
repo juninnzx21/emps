@@ -11,13 +11,13 @@ Validar autonomia técnica e capacidade de seguir documentação/códigos divers
 
 ### 1. Clonagem do repositório
 
-Clonei o repositório oficial do EMPS6:
+### Clonei o repositório oficial do EMPS6:
 
 ```bash
 git clone https://github.com/AlexGnatko/EMPS6
 ```
 
-2. Instalação e execução local
+### 2. Instalação e execução local
 
  * Coloquei o projeto na raiz do meu servidor local (por exemplo, htdocs/emps no XAMPP ou WAMP).
 
@@ -43,7 +43,7 @@ E acesse:
 http://localhost:8000/
 ```
 
-3. Criação de nova rota com “Hello World”
+### 3. Criação de nova rota com “Hello World”
   Criei uma nova rota acessível via:
 
 ```bash
@@ -56,13 +56,13 @@ ou
 http://localhost:8000/hello
 ```
 
-📁 Caminho do arquivo:
+### 📁 Caminho do arquivo:
 
 ```bash
 /modules/hello/index.php
 ```
 
-📄 Conteúdo do arquivo:
+### 📄 Conteúdo do arquivo:
 
 ```bash
 <?php
@@ -72,16 +72,16 @@ $smarty->assign("msg", "Hello World");
 $smarty->display("hello/hello.tpl");
 ```
 
-4. Versionamento com Git
+### 4. Versionamento com Git
  * Inicializei o versionamento com Git no diretório
 
  * Comitei todas as alterações, incluindo a nova rota
 
-📄 Documentação usada
+### 📄 Documentação usada
 Utilizei a documentação oficial do EMPS Framework:
 🔗 https://emps.ag38.ru
 
-✅ Conclusão
+###  ✅ Conclusão
 Todas as etapas solicitadas foram concluídas com sucesso:
 
 ✔️ Projeto clonado
